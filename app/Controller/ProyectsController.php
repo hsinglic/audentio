@@ -1,11 +1,8 @@
 <?php
 
-class ProyectosController extends AppController {
+class ProyectsController extends AppController {
 	public function index(){
 	 
 	}	
 	
-	public function index(){
-	 
-	}
 }
