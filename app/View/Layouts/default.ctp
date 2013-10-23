@@ -27,32 +27,33 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		<?php echo $cakeDescription ?>:
 		<?php echo $title_for_layout; ?>
 	</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<?php
 		echo $this->Html->meta('icon');
 
-		echo $this->Html->css('cake.generic');
-		echo $this->Html->script('jquery.min');
+		echo $this->Html->css('bootstrap-theme.min');
+		echo $this->Html->css('bootstrap.min');
+        echo $this->Html->css('audentio');
+        echo $this->Html->script('jquery2.min');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
 	?>
 </head>
-<body>
-	<div id="container">
-		<div id="header">
-			Hola, soy unheader
-		</div>
-		<div id="content">
-
-			<?php echo $this->Session->flash(); ?>
-
-			<?php echo $this->fetch('content'); ?>
-		</div>
-		<div id="footer">
-			hola, soy footer
-		</div>
-	</div>
-	<?php echo $this->element('sql_dump'); ?>
+<body class="guest">
+    <div class="container">
+        <header>
+            <h1 class="logo">Audentio Design</h1>
+        </header>
+    		<div id="content">
+    			<?php echo $this->Session->flash(); ?>
+    			<?php echo $this->fetch('content'); ?>
+    		</div>
+    	<footer>
+            &copy; 2013 Audentio Design.
+        </footer>
+    	<?php echo $this->element('sql_dump'); ?>
+    </div>
 </body>
 </html>
