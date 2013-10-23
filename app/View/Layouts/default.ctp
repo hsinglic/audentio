@@ -53,7 +53,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
     	<footer>
             &copy; 2013 Audentio Design.
         </footer>
-    	<?php echo $this->element('sql_dump'); ?>
+    	<?php // echo $this->element('sql_dump'); ?>
     </div>
 </body>
 </html>
