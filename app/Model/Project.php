@@ -1,8 +1,19 @@
 <?php
 App::uses('AppModel', 'Model');
 
-class Proyecto extends AppModel {
-    
+class Project extends AppModel {
+    public $useTable = 'projects';
+	public $displayField = 'title';
+	public $primaryKey = 'proyectoid';   
+	public $validate = array(
+		'title' => array(
+			'required' => array(
+				'rule' => array('notEmpty'),
+				'message' => 'A title is required'
+			)
+		)
+	);
+	
 	public function guardarProyecto($cliente, $datos, $presupuesto){
 		// guarda un proyecto nuevo en la base de datos
 		return 0;
@@ -16,7 +27,7 @@ class Proyecto extends AppModel {
 	public function obtenerProyecto($projectid){
 		// devuelve un proyecto a partir de su id
 		return new Proyecto();
-		
+	}	
 	public function obtenerListaProyectos($usuario){
 		// devuelve lista de proyectos asociados al usuario
 		return array(new Proyecto(), new Proyecto());

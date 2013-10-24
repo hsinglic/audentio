@@ -1,20 +1,30 @@
 <?php
 App::uses('AppModel', 'Model');
-
+/*
+usuarioid
+username
+password
+email
+role
+*/
 class User extends AppModel {
     public $useTable = 'usuarios';
 	    public $belongsTo = array(
         'Rol' => array(
             'className' => 'Role',
-            'foreignKey' => 'rolid'
+            'foreignKey' => 'role'
         )
     );
-	public $primaryKey = 'usuarioid';
+	public $primaryKey = 'usuarioid'; 
 	public $validate = array(
 		'username' => array(
 			'required' => array(
 				'rule' => array('notEmpty'),
 				'message' => 'A username is required'
+			),
+			'The username has already been taken'=>array(
+				'rule'=>'isUnique',
+				'message'=>'That username has already been taken.'
 			)
 		),
 		'password' => array(
@@ -23,11 +33,18 @@ class User extends AppModel {
 				'message' => 'A password is required'
 			)
 		),
-		'rolid' => array(
-			'valid' => array(
-				'rule' => array('inList', array(1, 2,3)),
-				'message' => 'Please enter a valid role',
-				'allowEmpty' => false
+		'email' => array(
+			'required' => array(
+				'rule' => array('notEmpty','isUnique'),
+				'message' => 'An email is required',
+			),
+			'valid email' => array(
+				'rule' => array('email',true),
+				'message' => 'Enter a valid email',
+			),
+			'That email is already registered.'=>array(
+				'rule'=>'isUnique',
+				'message'=>'That email is already registered.'
 			)
 		)
 	);	
