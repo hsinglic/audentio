@@ -1,19 +1,22 @@
+@mixin gradient-background($color1, $color2) {
+    background: $color1;
+    background-image: -webkit-gradient(radial, 50% 0%, 0, 50% 0%, 113, color-stop(0%, $color1), color-stop(100%,  $color2));
+    background-image: -webkit-radial-gradient(center top, closest-corner circle, $color1 0%, $color2 100%);
+    background-image: -moz-radial-gradient(center top, closest-corner circle, $color1 0%, $color2 100%);
+    background-image: -ms-radial-gradient(center top, closest-corner circle, $color1 0%, $color2 100%);
+    background-image: -o-radial-gradient(center top, closest-corner circle, $color1 0%, $color2 100%);
+    background-image: radial-gradient(closest-corner circle at center top, $color1 0%, $color2 100%);
+    background-position: top center;
+    background-repeat: no-repeat;
+}
 html {
     height: 100%;
 }
 body {
-    background: #f4f4f4;
-    background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyYWRpYWxHcmFkaWVudCBpZD0iZyI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmZmZmIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjRmNGY0Ii8+PC9yYWRpYWxHcmFkaWVudD48cmVjdCB4PSIwJSIgeT0iMCUiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmNGY0ZjQiIC8+PHJlY3QgeD0iMCUiIHk9Ii05Ny40MTM4JSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTk0LjgyNzYlIiBmaWxsPSJ1cmwoI2cpIiAvPjwvc3ZnPg==);
-    background-image: -webkit-gradient(radial, 50% 0%, 0, 50% 0%, 113, color-stop(0%, #ffffff), color-stop(100%, #f4f4f4));
-    background-image: -webkit-radial-gradient(center top, closest-corner circle, #ffffff 0%, #f4f4f4 100%);
-    background-image: -moz-radial-gradient(center top, closest-corner circle, #ffffff 0%, #f4f4f4 100%);
-    background-image: -ms-radial-gradient(center top, closest-corner circle, #ffffff 0%, #f4f4f4 100%);
-    background-image: -o-radial-gradient(center top, closest-corner circle, #ffffff 0%, #f4f4f4 100%);
-    background-image: radial-gradient(closest-corner circle at center top, #ffffff 0%, #f4f4f4 100%);
-    background-position: top center;
-    background-repeat: no-repeat;
+    @include gradient-background(#ffffff, #f4f4f4);
     height: 100%;
 }
+
 
 header {
     .logo {
@@ -59,4 +62,12 @@ footer {
     border: 1px solid #ECECEC;
     border-width: 1px 0;
     margin-top: 30px;
+}
+/**
+ * Errors
+**/
+
+body.error {
+    @include gradient-background(#ffffff, #f4f4f4);
+    height: 100%;
 }
