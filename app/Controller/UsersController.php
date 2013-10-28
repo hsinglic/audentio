@@ -15,7 +15,7 @@ class UsersController extends AppController {
 		if ($this->action == 'add' && $user['role'] == 1) {
 			return true;
 		}
-		$this->Session->setFlash(__('Service unavailable for your user.'));
+		$this->Session->setFlash('Service unavailable for your user.','error_message');
 		return parent::isAuthorized($user);
 	}
 	
@@ -26,7 +26,7 @@ class UsersController extends AppController {
 			if ($this->Auth->login()) {
 				return $this->redirect($this->Auth->redirect());
 			}
-			$this->Session->setFlash(__('Invalid username or password, try again'));
+			$this->Session->setFlash('Invalid username or password, try again','error_message');
 		}
 	}
 	public function logout() {
@@ -45,7 +45,7 @@ class UsersController extends AppController {
 				$this->set('current_user', $this->Auth->user());
 				return $this->redirect('/proyects/');
 			}
-			$this->Session->setFlash(__('Invalid username or password, try again'));
+			$this->Session->setFlash('Invalid username or password, try again','error_message');
 		}
 	}
 
@@ -59,10 +59,10 @@ class UsersController extends AppController {
             $this->request->data['User']['role']=2;
 			$this->User->create();
             if ($this->User->save($this->request->data)) {
-                $this->Session->setFlash(__('The user has been saved'));
+                $this->Session->setFlash('The user has been saved','success_message');
                 return $this->redirect(array('action' => 'add'));
             }
-            $this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+            $this->Session->setFlash('The user could not be saved. Please, try again.','error_message');
         }
     }
 	
