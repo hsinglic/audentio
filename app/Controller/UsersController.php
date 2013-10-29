@@ -2,7 +2,7 @@
 
 class UsersController extends AppController {
 	 public $uses = array('Role', 'User');
-	
+
 	public function beforeFilter() {
         
 		

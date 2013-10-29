@@ -4,7 +4,19 @@ App::uses('AppModel', 'Model');
 class Project extends AppModel {
     public $useTable = 'projects';
 	public $displayField = 'title';
-	public $primaryKey = 'proyectoid';   
+	public $primaryKey = 'proyectoid';  
+	// public $hasMany = array(
+        // 'asignaciones' => array(
+            // 'className' => 'Assignment',
+            // 'foreignKey' => 'proyectoid',
+        // )
+    // );
+	public $belongsTo = array(
+        'User' => array(
+            'className' => 'User',
+            'foreignKey' => 'usuarioid'
+        )
+    );
 	public $validate = array(
 		'title' => array(
 			'required' => array(
