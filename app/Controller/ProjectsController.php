@@ -18,7 +18,8 @@ class ProjectsController extends AppController {
 	
 	public function index(){
 		// print_r($this->Auth->user());
-		$this->set('role',$this->Auth->user()['role']);
+		$temp = $this->Auth->user();
+		$this->set('role',$temp['role']);
 		$params = array('conditions' => array('Assignment.usuarioid' => $this->Auth->user('usuarioid') ),'order'=>'Project.proyectoid desc');
 		$params = array('joins'=>array('type'=>'LEFT JOIN guatemal_db.asignacionProyecto AS Assignment','conditions'=>' ON Project.proyectoid=Assignment.proyectoid'),'conditions' => array('Assignment.usuarioid' => $this->Auth->user('usuarioid') ),'order'=>'Project.proyectoid desc');
 		$this->set('projects',$this->Project->find('all',$params));

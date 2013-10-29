@@ -47,9 +47,10 @@ class AppController extends Controller {
 	// }
 	
     public function beforeFilter() {
+		$temp=$this->Auth->user();
 		if($this->name=="CakeError")
 			$this->layout='error';
-		else if($this->Auth->user()['role']==1)
+		else if($temp['role']==1)
 			$this->layout='AdminLayout';
 		$this->Auth->allow('login','logout','register');
 		$this->set('logged_in', $this->Auth->loggedIn());
