@@ -15,6 +15,7 @@ class User extends AppModel {
             'foreignKey' => 'role'
         )
     );
+
 	public $primaryKey = 'usuarioid'; 
 	public $validate = array(
 		'username' => array(
