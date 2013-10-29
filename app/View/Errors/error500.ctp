@@ -17,13 +17,13 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 ?>
-<h2><?php echo $name; ?></h2>
-<p class="error">
-	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
-	<?php echo __d('cake', 'An Internal Error Has Occurred.'); ?>
-</p>
-<?php
-if (Configure::read('debug') > 0):
-	echo $this->element('exception_stack_trace');
-endif;
-?>
+<div class="jumbotron error">
+  <div class="container">
+    <h1><span class="glyphicon glyphicon-flash huge-error"></span><?php echo __d('cake', 'Oh boy, we got an error here'); ?></h1>
+	<?php printf(
+		__d('cake', 'An Internal Error Has Occurred.',
+		"<strong>'{$url}'</strong>"
+	); ?>
+    <p>...</p>
+  </div>
+</div>

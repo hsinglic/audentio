@@ -13,7 +13,7 @@ body {
   background-repeat: no-repeat;
   height: 100%; }
 
-header .logo {
+.guest header .logo {
   background: url(images/logo.png) no-repeat 0 0;
   width: 310px;
   height: 50px;
@@ -56,13 +56,19 @@ footer {
  * Errors
 **/
 body.error {
-  background: white;
-  background-image: -webkit-gradient(radial, 50% 0%, 0, 50% 0%, 113, color-stop(0%, white), color-stop(100%, #f4f4f4));
-  background-image: -webkit-radial-gradient(center top, closest-corner circle, white 0%, #f4f4f4 100%);
-  background-image: -moz-radial-gradient(center top, closest-corner circle, white 0%, #f4f4f4 100%);
-  background-image: -ms-radial-gradient(center top, closest-corner circle, white 0%, #f4f4f4 100%);
-  background-image: -o-radial-gradient(center top, closest-corner circle, white 0%, #f4f4f4 100%);
-  background-image: radial-gradient(closest-corner circle at center top, white 0%, #f4f4f4 100%);
+  background: #0080c7;
+  background-image: -webkit-gradient(radial, 50% 0%, 0, 50% 0%, 113, color-stop(0%, #0080c7), color-stop(100%, #0068a0));
+  background-image: -webkit-radial-gradient(center top, closest-corner circle, #0080c7 0%, #0068a0 100%);
+  background-image: -moz-radial-gradient(center top, closest-corner circle, #0080c7 0%, #0068a0 100%);
+  background-image: -ms-radial-gradient(center top, closest-corner circle, #0080c7 0%, #0068a0 100%);
+  background-image: -o-radial-gradient(center top, closest-corner circle, #0080c7 0%, #0068a0 100%);
+  background-image: radial-gradient(closest-corner circle at center top, #0080c7 0%, #0068a0 100%);
   background-position: top center;
   background-repeat: no-repeat;
-  height: 100%; }
+  height: 100%;
+  text-align: center;
+  color: #fff; }
+  body.error .jumbotron {
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.28);
+    box-shadow: 0 0 1px #FFF; }
