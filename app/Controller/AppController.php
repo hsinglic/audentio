@@ -41,12 +41,16 @@ class AppController extends Controller {
         )
     );
 
-	public function beforeRender(){
-		if($this->name=="CakeError")
-			$this->layout='error';
-	}
+	// public function beforeRender(){
+		// if($this->name=="CakeError")
+			// $this->layout='error';
+	// }
 	
     public function beforeFilter() {
+		if($this->name=="CakeError")
+			$this->layout='error';
+		else if($this->Auth->user()['role']==1)
+			$this->layout='AdminLayout';
 		$this->Auth->allow('login','logout','register');
 		$this->set('logged_in', $this->Auth->loggedIn());
         $this->set('current_user', $this->Auth->user());

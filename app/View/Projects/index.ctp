@@ -1,5 +1,7 @@
 <h1>Assigned Proyects</h1>
-
+<?php 
+	echo ($role==1)?$this->Html->link('Add team member',array('controller' => 'users', 'action' => 'add', 'full_base' => true)):"";
+?>
 <table>
 	<tr>
 		<th>Title</th>
