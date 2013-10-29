@@ -1,1 +1,1 @@
-<div id="error_message"><?php echo h($message); ?></div>
+<div id="alert alert-danger"><?php echo h($message); ?></div>

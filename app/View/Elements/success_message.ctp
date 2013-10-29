@@ -1,1 +1,1 @@
-<div id="success_message"><?php echo h($message); ?></div>
+<div id="alert alert-success"><?php echo h($message); ?></div>
