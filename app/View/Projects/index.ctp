@@ -15,13 +15,3 @@ foreach($projects as $project){
 }
 ?>
 </table>
-
-<?php
-
-echo $this->Html->link(
-    'Request Proyect',
-    array('controller' => 'projects', 'action' => 'request', 'full_base' => true)
-);
-
-
-?>
