@@ -11,7 +11,7 @@ $this->start('menu_lis');
 </li>
 <li>
 <?php 
-	echo $this->Html->link('Add team member',array('controller' => 'users', 'action' => 'add', 'full_base' => true));
+	echo $this->Html->link('Create team member',array('controller' => 'users', 'action' => 'add', 'full_base' => true));
 ?>
 </li>
 <?php $this->end(); 

@@ -52,7 +52,8 @@ $cakeDescription = __d('cake_dev', 'Audetio Design Panel');
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand logo" href="#">Audentio Design</a>
+            <?php echo $this->Html->link('Audentio Design ', '/pages/home', array('class' => 'navbar-brand logo')); ?>
+            
           </div>
 
           <!-- Collect the nav links, forms, and other content for toggling -->
