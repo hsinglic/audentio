@@ -2,18 +2,18 @@
 <?php 
 	echo ($role==1)?$this->Html->link('Add team member',array('controller' => 'users', 'action' => 'add', 'full_base' => true)):"";
 ?>
-<table>
-	<tr>
-		<th>Title</th>
-		<th>Created by</th>
-		<th>Status</th>
-	</tr>
+
+
+<ul class="list-group projects-list">
 <?php
-foreach($projects as $project){
-	echo "<tr><td>".$project['Project']['title']."</td><td>".$project['User']['username']."</td><td>".$project['Project']['state']."</td><td>"
-	.$this->Html->link('Detail', array('action' => 'detail', $project['Project']['proyectoid']))."</td></tr>";
-	
-	
-}
-?>
-</table>
+foreach($projects as $project){ ?>
+    <li class="list-group-item">
+        <span class="badge"><?php echo $project['Project']['state']; ?></span>
+        <h3><?php echo $this->Html->link('Detail', array('action' => 'detail', $project['Project']['proyectoid']), array('class'=>'btn btn-default'));?><?php echo $project['Project']['title'];?></h3><br />
+        Created by <?php echo $project['User']['username']; ?>
+    
+    
+        
+    </li>
+<?php } ?>
+</ul>

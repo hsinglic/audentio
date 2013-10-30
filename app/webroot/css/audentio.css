@@ -53,6 +53,15 @@ footer {
   margin-top: 30px; }
 
 /**
+ * Projects
+ **/
+.projects-list h3 {
+  float: left;
+  margin: 0 0 10px 0; }
+.projects-list br {
+  clear: both; }
+
+/**
  * Errors
 **/
 body.error {
