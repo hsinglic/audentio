@@ -12,6 +12,11 @@ class ProjectsController extends AppController {
 		if($this->action === 'index') {
 			return true;	
 		}
+		else if ($this->action === 'detail') {
+			return true;
+		}
+		// else if($this->action === 'detail')
+			// return 
 	
 		return parent::isAuthorized($user);
 	}
