@@ -9,7 +9,7 @@
 foreach($projects as $project){ ?>
     <li class="list-group-item">
         <span class="badge"><?php echo $project['Project']['state']; ?></span>
-        <h3><?php echo $this->Html->link('Detail', array('action' => 'detail', $project['Project']['proyectoid']), array('class'=>'btn btn-default'));?><?php echo $project['Project']['title'];?></h3><br />
+        <h3><?php //echo $this->Html->link('Detail', array('action' => 'detail', $project['Project']['proyectoid']), array('class'=>'btn btn-default'));?><?php echo $project['Project']['title'];?></h3><br />
         Created by <?php echo $project['User']['username']; ?>
     
     
