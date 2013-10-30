@@ -50,8 +50,10 @@ class AppController extends Controller {
 		$temp=$this->Auth->user();
 		if($this->name=="CakeError")
 			$this->layout='error';
-		else if($temp['role']==1)
+		else if($temp['role']==1 or $temp['role']==2)
 			$this->layout='AdminLayout';
+		else if($temp['role']==3)
+			$this->layout='ClientLayout';
 		$this->Auth->allow('login','logout','register');
 		$this->set('logged_in', $this->Auth->loggedIn());
         $this->set('current_user', $this->Auth->user());

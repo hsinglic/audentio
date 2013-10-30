@@ -21,7 +21,7 @@
   <div class="container">
     <h1><span class="glyphicon glyphicon-flash huge-error"></span><?php echo __d('cake', 'Oh boy, we got an error here'); ?></h1>
 	<?php printf(
-		__d('cake', 'An Internal Error Has Occurred.',
+		__d('cake', 'An Internal Error Has Occurred.'),
 		"<strong>'{$url}'</strong>"
 	); ?>
     <p>...</p>
