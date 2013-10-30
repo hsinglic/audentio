@@ -71,13 +71,21 @@ class ProjectsController extends AppController {
 	
 	public function detail($id = null) {
 		if (!$id) {
-			throw new NotFoundException('Invalid Project','error_message');
+			$this->Session->setFlash('You are not assigned to this project.','error_message');
+			$this->redirect(array('action' => 'index'));
 		}
 		$Project = $this->Project->findByProyectoid($id);
 		if (!$Project) {
-			throw new NotFoundException('Invalid Project','error_message');
+			$this->Session->setFlash('You are not assigned to this project.','error_message');
+			$this->redirect(array('action' => 'index'));
 		}
-		$temp = $this->Auth->user();
+		$temp=$this->Auth->user();
+		$usuarioid=$temp['usuarioid'];
+		$Project = $this->Assignment->find('first', array('conditions' => array('Assignment.proyectoid' => $id,'Assignment.usuarioid'=>$usuarioid)));
+		if (!$Project) {
+			$this->Session->setFlash('You are not assigned to this project.','error_message');
+			$this->redirect(array('action' => 'index'));
+		}
 		$this->set('role',$temp['role']);
 		$this->set('project',$Project);
 		$status = array('Pending'=>'Pending','In process'=>'In process','Finished'=>'Finished','Rejected'=>'Rejected');
