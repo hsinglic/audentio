@@ -60,22 +60,22 @@ class ProjectsController extends AppController {
 					);
 					$this->Assignment->save($algo);
 				}
-                $this->Session->setFlash(__('The project has been submitted.'));
+                $this->Session->setFlash('The project has been submitted.','success_message');
                 return $this->redirect(array('action' => 'index'));
             }
 			
-            $this->Session->setFlash(__('The project could not be saved. Please, try again.'));
+            $this->Session->setFlash('The project could not be saved. Please, try again.','error_message');
         }
 	 
 	}
 	
 	public function detail($id = null) {
 		if (!$id) {
-			throw new NotFoundException(__('Invalid Project'));
+			throw new NotFoundException('Invalid Project','error_message');
 		}
 		$Project = $this->Project->findByProyectoid($id);
 		if (!$Project) {
-			throw new NotFoundException(__('Invalid Project'));
+			throw new NotFoundException('Invalid Project','error_message');
 		}
 		$temp = $this->Auth->user();
 		$this->set('role',$temp['role']);
@@ -87,7 +87,7 @@ class ProjectsController extends AppController {
 			// print_r($this->request->data);
 			// exit;
 			if ($this->Project->save($this->request->data)) {
-				$this->Session->setFlash(__('Your Project has been updated.'));
+				$this->Session->setFlash('Your Project has been updated.','success_message');
 				return $this->redirect(array('action' => 'index'));
 			}
 			$this->Session->setFlash('Unable to update your Project.','error_message');
