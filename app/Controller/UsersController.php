@@ -62,8 +62,6 @@ class UsersController extends AppController {
 	
 		$roles = $this->Role->find( 'list', array( 'conditions' => array("not" => array ( "Role.nombre" => "Cliente"))));
 		$this->set(compact('roles'));
-		
-		
         if ($this->request->is('post')) {
             $this->request->data['User']['role']=2;
 			$this->User->create();

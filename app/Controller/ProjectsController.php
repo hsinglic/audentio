@@ -77,15 +77,20 @@ class ProjectsController extends AppController {
 		if (!$Project) {
 			throw new NotFoundException(__('Invalid Project'));
 		}
+		$temp = $this->Auth->user();
+		$this->set('role',$temp['role']);
 		$this->set('project',$Project);
-
+		$status = array('Pending'=>'Pending','In process'=>'In process','Finished'=>'Finished','Rejected'=>'Rejected');
+		$this->set(compact('status'));
 		if ($this->request->is(array('post', 'put'))) {
 			$this->Project->id = $id;
+			// print_r($this->request->data);
+			// exit;
 			if ($this->Project->save($this->request->data)) {
 				$this->Session->setFlash(__('Your Project has been updated.'));
 				return $this->redirect(array('action' => 'index'));
 			}
-			$this->Session->setFlash(__('Unable to update your Project.'));
+			$this->Session->setFlash('Unable to update your Project.','error_message');
 		}
 
 		if (!$this->request->data) {
