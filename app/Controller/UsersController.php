@@ -22,6 +22,9 @@ class UsersController extends AppController {
 	
 	
 	public function login() {
+		$rol=$this->Auth->user()['role'];
+		if($rol!="")
+			$this->redirect(array('controller' => 'projects', 'action' => 'index'));
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
 				return $this->redirect($this->Auth->redirect());
@@ -35,6 +38,10 @@ class UsersController extends AppController {
 	
 
 	public function register() {
+		// print_r($this->Auth->user());
+		$rol=$this->Auth->user()['role'];
+		if($rol!="")
+			$this->redirect(array('controller' => 'projects', 'action' => 'index'));
 		if ($this->request->is('post')) {
 			$this->request->data['User']['role']=3;
 			if ($this->User->save($this->request->data)) {
