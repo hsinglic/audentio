@@ -11,7 +11,6 @@ class UsersController extends AppController {
     }
 		
 	public function isAuthorized($user) {
-	
 		if ($this->action == 'add' && $user['role'] == 1) {
 			return true;
 		}

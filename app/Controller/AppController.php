@@ -41,16 +41,11 @@ class AppController extends Controller {
         )
     );
 
-    public function appError($error) {
-		if( $this->action==='display')
-			$this->redirect(array('controller' => 'users', 'action' => 'login'));
-		
-		
-    }
-	
     public function beforeFilter() {
 		$temp=$this->Auth->user();
-		if($this->name=="CakeError")
+		if( $this->action==='display')
+			$this->redirect(array('controller' => 'users', 'action' => 'login'));
+	else if($this->name=="CakeError")
 			$this->layout='error';
 		else if($temp['role']==1 or $temp['role']==2)
 			$this->layout='AdminLayout';
