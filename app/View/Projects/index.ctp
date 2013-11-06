@@ -1,4 +1,4 @@
-<h1>Assigned Proyects</h1>
+<h1>Assigned Projects</h1>
 
 <ul class="list-group projects-list">
 <?php
@@ -10,8 +10,6 @@ foreach($projects as $project){ ?>
         
         <?php echo $this->Html->link($project['Project']['title'], array('action'=>'detail', $project['Project']['proyectoid']));?></h3><br />
         Created by <?php echo $project['User']['username']; ?>
-    
-    
         
     </li>
 <?php } ?>
