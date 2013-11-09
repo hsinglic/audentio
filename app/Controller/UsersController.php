@@ -44,7 +44,7 @@ class UsersController extends AppController {
 		if($rol!="")
 			$this->redirect(array('controller' => 'projects', 'action' => 'index'));
 		if ($this->request->is('post')) {
-			$this->request->data['User']['role']=3;
+			$this->request->data['User']['role']=4;
 			if ($this->User->save($this->request->data)) {
 				$id = $this->User->id;
 				$this->request->data['User'] = array_merge($this->request->data['User'], array('usuarioid' => $id));
