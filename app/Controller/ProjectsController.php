@@ -1,7 +1,7 @@
 <?php
 
 class ProjectsController extends AppController {
-	public $uses = array('Project', 'Assignment','Deliverable','MessageDeliverable');
+	public $uses = array('Project', 'Assignment','Deliverable','MessageDeliverable','MessageProject');
 
 	public function beforeFilter() {
 
@@ -9,18 +9,18 @@ class ProjectsController extends AppController {
     }
 	
 	public function isAuthorized($user) {
-		if($this->action === 'index') {
+		if($this->action === 'index' || $this->action === 'chatClients' || $this->action === 'detail' || $this->action === 'deliverables' || $this->action === 'deliverable') {
 			return true;	
 		}
-		else if ($this->action === 'detail') {
+		else if ($this->action === 'request' && $user['role'] == 4) {
 			return true;
 		}
-		else if ($this->action === 'upload' && $user['role'] <> 4) {
+		else if (($this->action === 'upload' || $this->action === 'chatTeam') && $user['role'] <> 4) {
 			return true;
 		}
 		// else if($this->action === 'detail')
 			// return 
-	
+		$this->Session->setFlash('Service unavailable for your user.','error_message');
 		return parent::isAuthorized($user);
 	}
 	
@@ -283,6 +283,90 @@ class ProjectsController extends AppController {
 				else
 					$this->Session->setFlash('Unable to submit comment.','error_message');
 			}
+		}
+	}	
+
+	public function chatClients($id = null) {
+		if (!$id) {
+			$this->redirect(array('action' => 'index'));
+		}
+		$Project = $this->Project->findByProyectoid($id);
+		if (!$Project) {
+			$this->Session->setFlash("The project doesn't exist",'error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		$temp=$this->Auth->user();
+		$usuarioid=$temp['usuarioid'];
+		$this->set('role',$temp['role']);
+		$this->set('id',$id);
+		$this->set('Project',$Project);
+		$Project = $this->Assignment->find('first', array('conditions' => array('Assignment.proyectoid' => $id,'Assignment.usuarioid'=>$usuarioid)));
+		if (!$Project) {
+			$this->Session->setFlash('You are not allowed to see this.','error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		
+		$params = array('joins'=>array('type'=>'LEFT JOIN guatemal_db.usuarios AS User','conditions'=>' ON User.usuarioid=MessageProject.usuarioid'),
+			'fields'=>array('*'),
+			'conditions' => array('MessageProject.proyectoid' => $id,'MessageProject.withClient'=>1),
+			'order'=>'MessageProject.created desc');
+		$this->set('messages',$this->MessageProject->find('all',$params));
+		if ($this->request->is(array('post', 'put'))) {
+			$row['MessageProject'] = array('message'=>$this->request->data['Comment']['comment']);
+			$row['MessageProject']['proyectoid'] = $id;
+			$row['MessageProject']['usuarioid'] = $usuarioid;
+			$row['MessageProject']['withClient'] = 1;
+			// exit;
+			$this->MessageProject->create();
+			unset($this->MessageProject->data['MessageProject']['created']);
+			if ($this->MessageProject->save($row)) {
+				$this->Session->setFlash('Your comment has been sent.','success_message');
+				return $this->redirect(array('action' => 'chatClients',$id));
+			}
+			else
+				$this->Session->setFlash('Unable to submit comment.','error_message');	
+		}
+	}	
+	
+		public function chatTeam($id = null) {
+		if (!$id) {
+			$this->redirect(array('action' => 'index'));
+		}
+		$Project = $this->Project->findByProyectoid($id);
+		if (!$Project) {
+			$this->Session->setFlash("The project doesn't exist",'error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		$temp=$this->Auth->user();
+		$usuarioid=$temp['usuarioid'];
+		$this->set('role',$temp['role']);
+		$this->set('id',$id);
+		$this->set('Project',$Project);
+		$Project = $this->Assignment->find('first', array('conditions' => array('Assignment.proyectoid' => $id,'Assignment.usuarioid'=>$usuarioid)));
+		if (!$Project) {
+			$this->Session->setFlash('You are not allowed to see this.','error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		
+		$params = array('joins'=>array('type'=>'LEFT JOIN guatemal_db.usuarios AS User','conditions'=>' ON User.usuarioid=MessageProject.usuarioid'),
+			'fields'=>array('*'),
+			'conditions' => array('MessageProject.proyectoid' => $id,'MessageProject.withClient'=>0),
+			'order'=>'MessageProject.created desc');
+		$this->set('messages',$this->MessageProject->find('all',$params));
+		if ($this->request->is(array('post', 'put'))) {
+			$row['MessageProject'] = array('message'=>$this->request->data['Comment']['comment']);
+			$row['MessageProject']['proyectoid'] = $id;
+			$row['MessageProject']['usuarioid'] = $usuarioid;
+			$row['MessageProject']['withClient'] = 0;
+			// exit;
+			$this->MessageProject->create();
+			unset($this->MessageProject->data['MessageProject']['created']);
+			if ($this->MessageProject->save($row)) {
+				$this->Session->setFlash('Your comment has been sent.','success_message');
+				return $this->redirect(array('action' => 'chatClients',$id));
+			}
+			else
+				$this->Session->setFlash('Unable to submit comment.','error_message');	
 		}
 	}	
 	

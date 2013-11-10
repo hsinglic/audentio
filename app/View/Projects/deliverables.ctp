@@ -1,5 +1,6 @@
 <h1>List of deliverables</h1>
-<?php  echo ($role<>4)? $this->Html->link("Upload", array('action'=>'upload', $id)):"";?>
+<?php  echo ($role<>4)? $this->Html->link("Upload", array('action'=>'upload', $id)):"";
+echo $this->Html->link("Go back to project's index", array('controller'=>'projects','action'=>'detail', $id));?>
 <ul class="list-group projects-list">
 <?php
 foreach($deliverables as $deliverable){ ?>

@@ -23,7 +23,7 @@ foreach($messages as $message){ ?>
 <?php }
  ?>
 </ul>
-<div class="proyects form">
+<div class="projects form">
 <?php echo $this->Form->create('Comment'); ?>
     <fieldset>
         <legend><?php echo __('Comment Deliverable'); ?></legend>

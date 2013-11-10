@@ -47,7 +47,7 @@ class AppController extends Controller {
 			$this->redirect(array('controller' => 'users', 'action' => 'login'));
 	else if($this->name=="CakeError")
 			$this->layout='error';
-		else if($temp['role']>=1 or $temp['role']<=3)
+		else if($temp['role']>=1 and $temp['role']<=3)
 			$this->layout='AdminLayout';
 		else if($temp['role']==4)
 			$this->layout='ClientLayout';
