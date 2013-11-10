@@ -76,7 +76,7 @@ class ProjectsController extends AppController {
 		}
 		$Project = $this->Project->findByProyectoid($id);
 		if (!$Project) {
-			$this->Session->setFlash('You are not assigned to this project.','error_message');
+			$this->Session->setFlash("The project doesn't exist",'error_message');
 			$this->redirect(array('action' => 'index'));
 		}
 		$temp=$this->Auth->user();

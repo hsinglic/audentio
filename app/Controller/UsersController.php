@@ -1,7 +1,7 @@
 <?php
 
 class UsersController extends AppController {
-	 public $uses = array('Role', 'User');
+	 public $uses = array('Role', 'User','Assignment');
 
 	public function beforeFilter() {
         
@@ -11,7 +11,7 @@ class UsersController extends AppController {
     }
 		
 	public function isAuthorized($user) {
-		if ($this->action == 'add' && $user['role'] == 1) {
+		if (($this->action == 'add' || $this->action == 'assign') && $user['role'] == 1) {
 			return true;
 		}
 		$this->Session->setFlash('Service unavailable for your user.','error_message');
@@ -71,6 +71,53 @@ class UsersController extends AppController {
             $this->Session->setFlash('The user could not be saved. Please, try again.','error_message');
         }
     }
+	
+	public function assign($id = null) {
+		if (!$id) {
+			$this->Session->setFlash('You are not assigned to this project.','error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		$Project = $this->Assignment->findByProyectoid($id);
+		if (!$Project) {
+			$this->Session->setFlash("The project doesn't exist",'error_message');
+			$this->redirect(array('controller'=>'projects','action' => 'index'));
+		}
+		$temp=$this->Auth->user();
+		$usuarioid=$temp['usuarioid'];
+		$allusers= $this->User->find('all',array('conditions'=>array('not'=>array("User.usuarioid"=>1,"User.role" =>4))));
+		$assigned =  $this->Assignment->find('all',array('order'=>array('Assignment.usuarioid'),'fields'=>array('Assignment.usuarioid'),'conditions'=>array("Assignment.proyectoid"=>$id)));
+		// print_r($allusers);
+		$selected = array();
+		foreach($assigned as $ass){
+			array_push($selected,$ass['Assignment']['usuarioid']);
+		}
+		$users = array();
+		foreach($allusers as $user){
+			$users[$user['User']['usuarioid']] = $user['User']['username'];
+		}
+		$this->set('users',$users);
+		$this->set('selected',$selected);
+		$this->set('id',$id);
+		// print_r($users);
+		// exit;
+		
+		if ($this->request->is(array('post', 'put'))) {
+			// print_r($this->request->data);
+			$data = $this->request->data;
+			$this->Assignment->deleteAll(array(array('Assignment.proyectoid' => $id),array('not'=>array('Assignment.usuarioid'=>1))), false);
+			foreach($data['User']['Team members'] as $usuarioid){
+				$row = array('Assignment'=>array('usuarioid'=>$usuarioid,'proyectoid'=>$id));
+				$this->Assignment->create();
+				$this->Assignment->save($row);
+				// print_r($row);
+				
+			}
+			
+			
+			$this->Session->setFlash('Members assigned.','success_message');
+			
+		}
+	}
 	
 
 }

@@ -8,9 +8,10 @@ foreach($projects as $project){ ?>
 
         <h3>
         
-        <?php echo $this->Html->link($project['Project']['title'], array('controller'=>'users','action'=>'detail', $project['Project']['proyectoid']));?></h3><br />
+        <?php echo $this->Html->link($project['Project']['title'], array('action'=>'detail', $project['Project']['proyectoid']));?></h3><br />
         Created by <?php echo $project['User']['username']; ?>
         
     </li>
-<?php } ?>
+<?php }
+ ?>
 </ul>

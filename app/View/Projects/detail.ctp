@@ -22,6 +22,13 @@
               </div>
           </div>
           <div class="col-md-4">
+			  <div class="form-group">
+	              <?php 
+					  if($role==1){
+					 echo $this->Html->link("Assign members", array('controller'=>'users','action'=>'assign', $project['Project']['proyectoid'])); }?>
+			
+
+			  </div>
               <div class="form-group">
                   <?php 
                   if($role==1){
