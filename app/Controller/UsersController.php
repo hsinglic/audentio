@@ -59,10 +59,11 @@ class UsersController extends AppController {
 
 	 public function add() {
 	
-		$roles = $this->Role->find( 'list', array( 'conditions' => array("not" => array ( "Role.nombre" => "Cliente"))));
+		$roles = $this->Role->find( 'list', array( 'conditions' => array("not" => array ( "Role.nombre" => array("Client","Admin")))));
 		$this->set(compact('roles'));
         if ($this->request->is('post')) {
-            $this->request->data['User']['role']=2;
+            print_r($this->request->data);
+			$this->request->data['User']['role']=$this->request->data['User']['Role'];
 			$this->User->create();
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash('The user has been saved','success_message');
@@ -74,8 +75,7 @@ class UsersController extends AppController {
 	
 	public function assign($id = null) {
 		if (!$id) {
-			$this->Session->setFlash('You are not assigned to this project.','error_message');
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(array('controller'=>'projects','action' => 'index'));
 		}
 		$Project = $this->Assignment->findByProyectoid($id);
 		if (!$Project) {

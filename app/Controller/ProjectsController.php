@@ -1,7 +1,7 @@
 <?php
 
 class ProjectsController extends AppController {
-	public $uses = array('Project', 'Assignment');
+	public $uses = array('Project', 'Assignment','Deliverable','MessageDeliverable');
 
 	public function beforeFilter() {
 
@@ -15,6 +15,9 @@ class ProjectsController extends AppController {
 		else if ($this->action === 'detail') {
 			return true;
 		}
+		else if ($this->action === 'upload' && $user['role'] <> 4) {
+			return true;
+		}
 		// else if($this->action === 'detail')
 			// return 
 	
@@ -25,8 +28,8 @@ class ProjectsController extends AppController {
 		// print_r($this->Auth->user());
 		$temp = $this->Auth->user();
 		$this->set('role',$temp['role']);
-		$params = array('conditions' => array('Assignment.usuarioid' => $this->Auth->user('usuarioid') ),'order'=>'Project.proyectoid desc');
-		$params = array('joins'=>array('type'=>'LEFT JOIN guatemal_db.asignacionProyecto AS Assignment','conditions'=>' ON Project.proyectoid=Assignment.proyectoid'),'conditions' => array('Assignment.usuarioid' => $this->Auth->user('usuarioid') ),'order'=>'Project.proyectoid desc');
+		// $params = array('conditions' => array('Assignment.usuarioid' => $this->Auth->user('usuarioid') ),'order'=>'Project.proyectoid desc');
+		$params = array('joins'=>array('type'=>'LEFT JOIN guatemal_db.asignacionProyecto AS Assignment','conditions'=>' ON Project.proyectoid=Assignment.proyectoid'),'conditions' => array('Assignment.usuarioid' => $this->Auth->user('usuarioid') ),'order'=>'Project.created desc');
 		$this->set('projects',$this->Project->find('all',$params));
 		// $allProjects = $this->Assignment->find('all',array(
         // 'conditions' => array('Assignment.usuarioid' => $this->Auth->user('usuarioid') )));
@@ -41,6 +44,7 @@ class ProjectsController extends AppController {
 			
 			// exit;
 			$this->Project->create();
+			unset($this->Project->data['Project']['created']);
             if ($this->Project->save($this->request->data)) {
 				$this->Assignment->create();
 				$algo = array(
@@ -71,7 +75,6 @@ class ProjectsController extends AppController {
 	
 	public function detail($id = null) {
 		if (!$id) {
-			$this->Session->setFlash('You are not assigned to this project.','error_message');
 			$this->redirect(array('action' => 'index'));
 		}
 		$Project = $this->Project->findByProyectoid($id);
@@ -103,6 +106,183 @@ class ProjectsController extends AppController {
 
 		if (!$this->request->data) {
 			$this->request->data = $Project;
+		}
+	}	
+	
+	public function deliverables($id = null) {
+		if (!$id) {
+			$this->redirect(array('action' => 'index'));
+		}
+		$Project = $this->Project->findByProyectoid($id);
+		if (!$Project) {
+			$this->Session->setFlash("The project doesn't exist",'error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		$temp=$this->Auth->user();
+		$usuarioid=$temp['usuarioid'];
+		$this->set('role',$temp['role']);
+		$this->set('id',$id);
+		$Project = $this->Assignment->find('first', array('conditions' => array('Assignment.proyectoid' => $id,'Assignment.usuarioid'=>$usuarioid)));
+		if (!$Project) {
+			$this->Session->setFlash('You are not allowed to see this.','error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		
+		if($usuarioid==4)
+			$params = array('joins'=>array('type'=>'LEFT JOIN guatemal_db.usuarios AS User','conditions'=>' ON User.usuarioid=Deliverable.usuarioid'),'fields'=>array('*'),'conditions' => array('Deliverable.approved' => 1,'Deliverable.proyectoid'=>$id),'order'=>'Deliverable.created desc');
+		else
+			$params = array('joins'=>array('type'=>'LEFT JOIN guatemal_db.usuarios AS User','conditions'=>' ON User.usuarioid=Deliverable.usuarioid'),'fields'=>array('*'),'conditions' => array('Deliverable.proyectoid'=>$id),'order'=>'Deliverable.created desc');
+		$this->set('deliverables',$this->Deliverable->find('all',$params));
+
+	
+	}	
+	function uploadFile() {
+	  $file = $this->data['Deliverable']['File'];
+	  if ($file['error'] === UPLOAD_ERR_OK) {
+		$id = date("Ymd").$file['name'];
+		if (move_uploaded_file($file['tmp_name'], APP.'uploads\\'.$id)) {
+		  return $id;
+		}
+	  }
+	  return 0;
+	}
+	
+	public function upload($id = null) {
+		if (!$id) {
+			$this->redirect(array('action' => 'index'));
+		}
+		$Project = $this->Project->findByProyectoid($id);
+		if (!$Project) {
+			$this->Session->setFlash("The project doesn't exist",'error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		$temp=$this->Auth->user();
+		
+		$usuarioid=$temp['usuarioid'];
+		$Project = $this->Assignment->find('first', array('conditions' => array('Assignment.proyectoid' => $id,'Assignment.usuarioid'=>$usuarioid)));
+		if (!$Project) {
+			$this->Session->setFlash('You are not allowed to see this.','error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		
+		if ($this->request->is(array('post', 'put'))) {
+			$this->Project->id = $id;
+			$link = $this->uploadFile();
+			if($link<>0){
+				$this->request->data['Deliverable']['File']=$link;
+				$this->request->data['Deliverable']['usuarioid']=$usuarioid;
+				$this->request->data['Deliverable']['proyectoid']=$id;
+				$this->request->data['Deliverable']['uploadDate']=DboSource::expression('NOW()');;
+				$this->Deliverable->create();
+				unset($this->Deliverable->data['Deliverable']['created']);
+				
+				if ($this->Deliverable->save($this->request->data)) {
+					$this->Session->setFlash('Your file was uploaded.','success_message');
+					return $this->redirect(array('action' => 'deliverables',$id));
+				}
+					$this->Session->setFlash('Unable to upload file. Try again.','error_message');
+			}
+			else
+				$this->Session->setFlash('Unable to upload file. Try again.','error_message');
+		}
+	}
+	
+	public function download($id) {
+		if (!$id) {
+			return false;
+		}
+		$deliverable = $this->Deliverable->find('first', array('conditions' => array('Deliverable.deliverableid' => $id)));
+		$projectid = $deliverable['Deliverable']['proyectoid'];
+		
+		$Project = $this->Project->findByProyectoid($projectid);
+		if (!$Project) {
+			return false;
+		}
+		$temp=$this->Auth->user();
+		$usuarioid=$temp['usuarioid'];
+		$Project = $this->Assignment->find('first', array('conditions' => array('Assignment.proyectoid' => $projectid,'Assignment.usuarioid'=>$usuarioid)));
+		if (!$Project) {
+			return false;
+		}
+		if($usuarioid==4 && $deliverable['Deliverable']['approved']==0)
+		{
+			return false;
+		}
+		$deliverable = $this->Deliverable->find('first', array('conditions' => array('Deliverable.deliverableid' => $id)));
+		$path = APP.'uploads\\'.$deliverable['Deliverable']['File'];
+		$this->response->file($path, array(
+			'download' => true,
+			'name' => $deliverable['Deliverable']['File'],
+		));
+		return $this->response;
+	}
+	
+	public function deliverable($id = null) {
+	
+		if (!$id) {
+			$this->redirect(array('action' => 'index'));
+		}
+		$deliverable = $this->Deliverable->find('first', array('conditions' => array('Deliverable.deliverableid' => $id)));
+		$projectid = $deliverable['Deliverable']['proyectoid'];
+		
+		$Project = $this->Project->findByProyectoid($projectid);
+		if (!$Project) {
+			$this->Session->setFlash("The project doesn't exist",'error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		$temp=$this->Auth->user();
+		$usuarioid=$temp['usuarioid'];
+		$Project = $this->Assignment->find('first', array('conditions' => array('Assignment.proyectoid' => $projectid,'Assignment.usuarioid'=>$usuarioid)));
+		if (!$Project) {
+			$this->Session->setFlash('You are not assigned to this project.','error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		if($usuarioid==4 && $deliverable['Deliverable']['approved']==0)
+		{
+			$this->Session->setFlash('You are not allowed in this conversation','error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		$this->set('role',$temp['role']);
+		$this->set('deliverable',$deliverable);
+		$this->set('projectid',$projectid);
+		$this->set('approve',array(1=>''));
+		$this->set('selected',array($deliverable['Deliverable']['approved']));
+		$params = array('joins'=>array('type'=>'LEFT JOIN guatemal_db.usuarios AS User','conditions'=>' ON User.usuarioid=MessageDeliverable.usuarioid'),
+			'fields'=>array('*'),
+			'conditions' => array('MessageDeliverable.deliverableid' => $id),
+			'order'=>'MessageDeliverable.created desc');
+		$this->set('messages',$this->MessageDeliverable->find('all',$params));
+		if ($this->request->is(array('post', 'put'))) {
+			if(isset($this->request->data['Deliverable']['approved'])){
+				
+				$this->request->data['Deliverable']['approved']=(int)$this->request->data['Deliverable']['approved'];
+				// print_r($this->request->data);
+				// exit;
+				$this->Deliverable->id = $id;
+				// if ($this->Deliverable->save($this->request->data,array('conditions'=>array('Deliverable.deliverableid'=>$id)))) {
+				if ($this->Deliverable->save($this->request->data)) {
+					$this->Session->setFlash('Deliverable updated','success_message');
+					return $this->redirect(array('action' => 'deliverables',$projectid));
+				}
+				else
+					$this->Session->setFlash('Unable to update.','error_message');
+			}
+			else
+			{
+				
+				$row['MessageDeliverable'] = array('message'=>$this->request->data['Comment']['comment']);
+				$row['MessageDeliverable']['deliverableid'] = $id;
+				$row['MessageDeliverable']['usuarioid'] = $usuarioid;
+				// exit;
+				$this->MessageDeliverable->create();
+				unset($this->MessageDeliverable->data['MessageDeliverable']['created']);
+				if ($this->MessageDeliverable->save($row)) {
+					$this->Session->setFlash('Your comment has been sent.','success_message');
+					return $this->redirect(array('action' => 'deliverable',$id));
+				}
+				else
+					$this->Session->setFlash('Unable to submit comment.','error_message');
+			}
 		}
 	}	
 	

@@ -13,6 +13,7 @@
           <div class="col-md-4">
               <p>Check the deliverables for this project and approve them.</p>
               <a href="#" class="btn btn-default btn-lg " role="button">Deliverables</a>
+			  <?php  echo $this->Html->link("Deliverables", array('action'=>'deliverables', $project['Project']['proyectoid']));?>
           </div>
           <div class="col-md-4">
               <p>Discuss the project's features, issues, and send feedback or suggestions.</p>
