@@ -12,28 +12,18 @@
       <div class="row text-muted">
           <div class="col-md-4">
               <p>Check the deliverables for this project and approve them.</p>
-              <a href="#" class="btn btn-default btn-lg " role="button">Deliverables</a>
-			  <?php  echo $this->Html->link("Deliverables", array('action'=>'deliverables', $project['Project']['proyectoid']));?>
+			  <?php  echo $this->Html->link("Deliverables", array('action'=>'deliverables', $project['Project']['proyectoid']), array('class'=>'btn btn-default btn-lg', 'role'=>'button'));?>
           </div>
           <div class="col-md-4">
               <p>Discuss the project's features, issues, and send feedback or suggestions.</p>
               <div class="btn-group">
-                  <a href="#" class="btn btn-default btn-lg " role="button">With Client</a>
-				  <?php  echo $this->Html->link("With Client", array('action'=>'chatClients', $project['Project']['proyectoid']));?>
+				  <?php  echo $this->Html->link("With Client", array('action'=>'chatClients', $project['Project']['proyectoid']), array('class'=>'btn btn-default btn-lg', 'role'=>'button'));?>
 				  <?php if($role<>4){?>
-                  <a href="#" class="btn btn-default btn-lg " role="button">With team</a>
-				  <?php  echo $this->Html->link("With team", array('action'=>'chatTeam', $project['Project']['proyectoid']));?>
+				  <?php  echo $this->Html->link("With team", array('action'=>'chatTeam', $project['Project']['proyectoid']),array('class'=>'btn btn-default btn-lg', 'role'=>'button'));?>
 				  <?php } ?>
               </div>
           </div>
           <div class="col-md-4">
-			  <div class="form-group">
-	              <?php 
-					  if($role==1){
-					 echo $this->Html->link("Assign members", array('controller'=>'users','action'=>'assign', $project['Project']['proyectoid'])); }?>
-			
-
-			  </div>
               <div class="form-group">
                   <?php 
                   if($role==1){
@@ -54,6 +44,12 @@
       </div>
   </div>
 </div>
+<div class="form-group">
+    
+    <?php 
+	  if($role==1){
+	 echo $this->Html->link('<span class="glyphicon glyphicon-user"></span> Assign members', array('controller'=>'users','action'=>'assign', $project['Project']['proyectoid']), array('escape'=>false, 'class'=>'btn btn-default')); }?>
 
+</div>
 
 <?php //echo $this->element('sql_dump'); ?>
