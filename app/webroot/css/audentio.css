@@ -61,6 +61,22 @@ footer {
 .projects-list br {
   clear: both; }
 
+.file-input-wrapper {
+  color: #333;
+  background-color: #FFF;
+  border-color: #CCC; }
+  .file-input-wrapper:hover {
+    color: #333;
+    background-color: #EBEBEB;
+    border-color: #ADADAD; }
+
+.approve-block label, .approve-block .checkbox, .approve-block .submit {
+  float: left; }
+.approve-block .checkbox {
+  margin: 0 10px; }
+.approve-block .submit {
+  margin: -8px 0 0 0; }
+
 /**
  * Errors
 **/

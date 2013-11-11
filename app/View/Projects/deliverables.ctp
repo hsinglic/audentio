@@ -1,6 +1,12 @@
-<h1>List of deliverables</h1>
-<?php  echo ($role<>4)? $this->Html->link("Upload", array('action'=>'upload', $id)):"";
-echo $this->Html->link("Go back to project's index", array('controller'=>'projects','action'=>'detail', $id));?>
+<?php 
+echo $this->Html->link("<span class='glyphicon glyphicon-chevron-left'></span> Go back to project's index", array('controller'=>'projects','action'=>'detail', $id), array('class'=>'btn btn-default', 'escape'=>false)); ?>
+
+<h1>List of deliverables <?php  echo ($role<>4)? $this->Html->link("<span class='glyphicon glyphicon-cloud-upload'></span> New deliverable", array('action'=>'upload', $id), array('class'=>'btn btn-primary', 'escape'=>false)):""; ?>
+</h1>
+
+
+
+
 <ul class="list-group projects-list">
 <?php
 foreach($deliverables as $deliverable){ ?>

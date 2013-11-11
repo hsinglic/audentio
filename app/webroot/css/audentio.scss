@@ -75,6 +75,34 @@ footer {
         clear: both;
      }
 }
+
+.file-input-wrapper {
+    color: #333;
+    background-color: #FFF;
+    border-color: #CCC;
+    //color: #FFF;
+    //background-color: #428BCA;
+    //border-color: #357EBD;
+    &:hover {
+        //color: #FFF;
+        //background-color: #3276B1;
+        //border-color: #285E8E;
+        color: #333;
+        background-color: #EBEBEB;
+        border-color: #ADADAD;
+    }
+}
+.approve-block {
+    label, .checkbox, .submit {
+        float: left;
+    }
+    .checkbox {
+        margin: 0 10px;
+    }
+    .submit {
+        margin: -8px 0 0 0;
+    }
+}
 /**
  * Errors
 **/

@@ -35,6 +35,8 @@ $cakeDescription = __d('cake_dev', 'Audetio Design Panel');
 		echo $this->Html->css('bootstrap.min');
         echo $this->Html->css('audentio');
         echo $this->Html->script('jquery2.min');
+        echo $this->Html->script('bootstrap.file-input');
+        echo $this->Html->script('main');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
