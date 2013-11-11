@@ -95,6 +95,9 @@ class UsersController extends AppController {
 		foreach($allusers as $user){
 			$users[$user['User']['usuarioid']] = $user['User']['username'];
 		}
+		
+		$params = array('fields'=>array('*'),'conditions' => array('Assignment.proyectoid' => $id));
+		$this->set('project',$this->Assignment->find('all',$params)[0]);
 		$this->set('users',$users);
 		$this->set('selected',$selected);
 		$this->set('id',$id);

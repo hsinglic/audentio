@@ -2,7 +2,8 @@
 
     <div class="col-md-4">
         <?php 
-        echo $this->Html->link("<span class='glyphicon glyphicon-chevron-left'></span> Go back to project's index", array('controller'=>'projects','action'=>'detail', $id), array('class'=>'btn btn-default', 'escape'=>false)); ?>
+        echo $this->Html->link("<span class='glyphicon glyphicon-chevron-left'></span> Go back to project's index", array('controller'=>'projects','action'=>'detail', $id), array('class'=>'btn btn-default', 'escape'=>false)); 
+		echo $project['Project']['title'];?>
     </div>
     <div class="col-md-8 well">
     
