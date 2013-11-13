@@ -49,6 +49,8 @@
     <?php 
 	  if($role==1){
 	 echo $this->Html->link('<span class="glyphicon glyphicon-user"></span> Assign members', array('controller'=>'users','action'=>'assign', $project['Project']['proyectoid']), array('escape'=>false, 'class'=>'btn btn-default')); }?>
+	 <?php if($role==1 || $role==4){
+	 echo $this->Html->link('<span class="glyphicon glyphicon-user"></span> Payment records', array('action'=>'payment', $project['Project']['proyectoid']), array('escape'=>false, 'class'=>'btn btn-default')); }?>
 
 </div>
 
