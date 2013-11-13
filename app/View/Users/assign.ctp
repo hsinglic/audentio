@@ -1,9 +1,10 @@
 <div class="row">
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <?php 
-        echo $this->Html->link("<span class='glyphicon glyphicon-chevron-left'></span> Go back to project's index", array('controller'=>'projects','action'=>'detail', $id), array('class'=>'btn btn-default', 'escape'=>false)); 
-		echo $project['Project']['title'];?>
+        echo $this->Html->link("<span class='glyphicon glyphicon-chevron-left'></span> Go back to project's index", array('controller'=>'projects','action'=>'detail', $id), array('class'=>'btn btn-default', 'escape'=>false)); ?>
+        <h2><?php echo $project['Project']['title']?></h2>
+        <h3>&raquo; Assign team members for this project. </h3>
     </div>
     <div class="col-md-8 well">
     
