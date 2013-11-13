@@ -1,7 +1,7 @@
 <?php
 
 class ProjectsController extends AppController {
-	public $uses = array('Project', 'Assignment','Deliverable','MessageDeliverable','MessageProject');
+	public $uses = array('Project', 'Assignment','Deliverable','MessageDeliverable','MessageProject','Payment');
 
 	public function beforeFilter() {
 
@@ -13,6 +13,9 @@ class ProjectsController extends AppController {
 			return true;	
 		}
 		else if ($this->action === 'request' && $user['role'] == 4) {
+			return true;
+		}		
+		else if ($this->action === 'payment' && ($user['role'] == 4 || $user['role'] == 1)) {
 			return true;
 		}
 		else if (($this->action === 'upload' || $this->action === 'chatTeam') && $user['role'] <> 4) {
@@ -328,7 +331,7 @@ class ProjectsController extends AppController {
 		}
 	}	
 	
-		public function chatTeam($id = null) {
+	public function chatTeam($id = null) {
 		if (!$id) {
 			$this->redirect(array('action' => 'index'));
 		}
@@ -369,5 +372,46 @@ class ProjectsController extends AppController {
 				$this->Session->setFlash('Unable to submit comment.','error_message');	
 		}
 	}	
+	
+	public function payment($id = null) {
+		if (!$id) {
+			$this->redirect(array('action' => 'index'));
+		}
+		$Project = $this->Project->findByProyectoid($id);
+		if (!$Project) {
+			$this->Session->setFlash("The project doesn't exist",'error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		$temp=$this->Auth->user();
+		$usuarioid=$temp['usuarioid'];
+		$this->set('role',$temp['role']);
+		$this->set('id',$id);
+		$this->set('project',$Project);
+		$Project = $this->Assignment->find('first', array('conditions' => array('Assignment.proyectoid' => $id,'Assignment.usuarioid'=>$usuarioid)));
+		if (!$Project) {
+			$this->Session->setFlash('You are not allowed to see this.','error_message');
+			$this->redirect(array('action' => 'index'));
+		}
+		
+		$params = array('conditions' => array('Payment.proyectoid' => $id),'order'=>'Payment.updated desc');
+		$this->set('payment',$this->Payment->find('all',$params));
+		if ($this->request->is(array('post', 'put'))) {
+			$row['Project'] = array('cost'=>number_format($this->request->data['Payment']['Update Cost'], 2, '.', ''));
+			$row['Project']['proyectoid'] = $id;
+			$data['Payment'] = array('payment'=>number_format($this->request->data['Payment']['Quantity'], 2, '.', ''));
+			$data['Payment']['description'] = $this->request->data['Payment']['Description'];
+			$data['Payment']['proyectoid'] = $id;
+			$this->Payment->create();
+			
+			// exit;
+			unset($this->Payment->data['Payment']['updated']);
+			if ( $this->Payment->save($data))  {
+				$this->Session->setFlash('Information updated.','success_message');
+				return $this->redirect(array('action' => 'payment',$id));
+			}
+			else
+				$this->Session->setFlash('Unable to submit information. Submit the correct values.','error_message');	
+		}
+	}
 	
 }

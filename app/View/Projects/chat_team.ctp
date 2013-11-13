@@ -13,10 +13,10 @@ echo $this->Html->link("<span class='glyphicon glyphicon-chevron-left'></span> G
             <?php
             foreach($messages as $message){ ?>
                 <li class="list-group-item">
-                    <small class="text-muted pull-right">Date: <?php echo $message['MessageDeliverable']['created']; ?></small>
+                    <small class="text-muted pull-right">Date: <?php echo $message['MessageProject']['created']; ?></small>
                     <strong> <?php echo $message['User']['username']; ?> </strong> said:
                     <p>
-                        <?php echo $message['MessageDeliverable']['message']; ?>
+                        <?php echo $message['MessageProject']['message']; ?>
                     </p>
                 </li>
             <?php }
