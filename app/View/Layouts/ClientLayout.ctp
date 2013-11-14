@@ -14,7 +14,7 @@ $this->start('menu_lis');
 <li>
 <?php
 echo $this->Html->link(
-    'Request Proyect',
+    'Request Project',
     array('controller' => 'projects', 'action' => 'request', 'full_base' => true)
 );
 ?></li>

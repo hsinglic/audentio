@@ -54,26 +54,7 @@ class User extends AppModel {
 		// return 0;
 	// }
 	
-	public function exist($email){
-		// boolean si ya existe un usuario cin ese email
-		return false;
-	}
-	
-	public function getUser($nombre, $contrasena){
-		// devuelve la informacion de un usuario si el nombre y contasena son validos
-		if ($nombre == "prueba" && $contrasena == "1234"){
-			return new User();
-		}
-		else
-			return false;
-	}
-	
-	public function beforeSave($options = array()) {
-		if (isset($this->data[$this->alias]['password'])) {
-			$this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['password']);
-		}
-		return true;
-	}
+
 
 	
 	

@@ -4,8 +4,8 @@ echo $this->Html->link("<span class='glyphicon glyphicon-chevron-left'></span> G
 <h1>Payment records</h1>
 <?php
     
-    //FIX BEN
-    $total=0.00;
+    
+    
     
 ?>
 <div class="well">
@@ -19,7 +19,7 @@ echo $this->Html->link("<span class='glyphicon glyphicon-chevron-left'></span> G
         foreach($payment as $pay){ ?>
             <li class="list-group-item">
                 <small class="text-muted pull-right">Updated: <?php echo $pay['Payment']['updated']; ?></small>
-                <strong><?php echo $pay['Payment']['payment']; $total+=$pay['Payment']['payment'];?></strong>
+                <strong>$<?php echo $pay['Payment']['payment'];?></strong>
         		<?php echo $pay['Payment']['description'];?><br/>
         
             </li>

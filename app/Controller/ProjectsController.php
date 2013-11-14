@@ -98,9 +98,13 @@ class ProjectsController extends AppController {
 		$this->set(compact('status'));
 		if ($this->request->is(array('post', 'put'))) {
 			$this->Project->id = $id;
+			$this->request->data['Project']['state'] = $this->request->data['Project']['Project state'];
 			// print_r($this->request->data);
 			// exit;
-			if ($this->Project->save($this->request->data)) {
+			// if ($this->Project->save($this->request->data)) {
+			// print_r($this->request->data);
+			// exit;
+			if ($this->Project->save($this->request->data,array('conditions'=>array('Project.proyectoid'=>$id)))) {
 				$this->Session->setFlash('Your Project has been updated.','success_message');
 				return $this->redirect(array('action' => 'index'));
 			}
@@ -395,22 +399,35 @@ class ProjectsController extends AppController {
 		
 		$params = array('conditions' => array('Payment.proyectoid' => $id),'order'=>'Payment.updated desc');
 		$this->set('payment',$this->Payment->find('all',$params));
-		if ($this->request->is(array('post', 'put'))) {
-			$row['Project'] = array('cost'=>number_format($this->request->data['Payment']['Update Cost'], 2, '.', ''));
-			$row['Project']['proyectoid'] = $id;
+		$params = array('fields'=>'SUM(payment) as hola','conditions' => array('Payment.proyectoid' => $id),'order'=>'Payment.updated desc');
+		// echo $this->Payment->find('all',$params)[0][0]['hola'];
+		$this->set('total',$this->Payment->find('all',$params)[0][0]['hola']);
+
+		if ($this->request->is(array('post', 'put'))){
+			if($this->request->data['Payment']['Quantity']!=""){
 			$data['Payment'] = array('payment'=>number_format($this->request->data['Payment']['Quantity'], 2, '.', ''));
 			$data['Payment']['description'] = $this->request->data['Payment']['Description'];
 			$data['Payment']['proyectoid'] = $id;
 			$this->Payment->create();
-			
-			// exit;
 			unset($this->Payment->data['Payment']['updated']);
-			if ( $this->Payment->save($data))  {
+			if ($this->Payment->save($data))
 				$this->Session->setFlash('Information updated.','success_message');
-				return $this->redirect(array('action' => 'payment',$id));
-			}
 			else
 				$this->Session->setFlash('Unable to submit information. Submit the correct values.','error_message');	
+			}
+			
+			$row['Project'] = array('cost'=>number_format((double)$this->request->data['Payment']['Update Cost'], 2, '.', ''));
+			$row['Project']['proyectoid'] = $id;
+			$this->Project->id = $id;
+			print_r($row);
+			// exit;
+			// if ($this->Project->save($this->request->data)) {
+			// print_r($this->request->data);
+			// exit;
+			// if ($this->Project->save($this->request->data,array('conditions'=>array('Project.proyectoid'=>$id)))) {
+			// exit;
+			$this->Project->save($row);
+			return $this->redirect(array('action' => 'payment',$id));
 		}
 	}
 	
